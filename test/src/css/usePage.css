@@ -1,0 +1,38 @@
+body{
+    font-size: '20px';
+}
+
+.direct{
+    display: flex
+}
+
+.direct.left{
+    width: '20%';
+    height: '100%';
+    background: '#f0f0f0';
+    padding: '10px'
+}
+
+.direct.right{
+    flex: 1;
+    padding: '10px';
+}
+
+.one ul{
+    list-style-type: none;
+}
+
+.edit {
+    font-size: '20px';
+}
+
+.all{
+    width:'300px';
+    height:'15px';
+    border : '2px solid #f0f0f0';
+}
+
+.all tbody tr td{
+    border : '2px solid #f0f0f0';
+    width: '30px';
+}
