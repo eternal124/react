@@ -1,35 +1,51 @@
 import PropTypes from 'prop-types';
 import React from 'react'
+import { connect } from 'react-redux'
+
+import { onAdd } from '../actions'
 
 class Add extends React.Component{
-
-    constructor(props) {
-        super(props);
+    handleClick () {
+        let user = {}
+        user.name = this.name.value;
+        user.age = this.age.value;
+        user.sex = this.sex.value
+        user.tel = this.tel.value
+        user.address = this.address.value
+        this.props.onClick(user)
     }
 
-    handleClick(e) {
-        e.preventDefault();
-        this.props.onAdd(this.props.user);
-    }
-
-    render() {
+    render () {
         return (
             <div>
-                姓名: <input type="text" defaultValue={this.props.user.name} /><br /><br />
-                年龄：<input type="text" defaultValue={this.props.user.age} /><br /><br />
-                性别：<input type="text" defaultValue={this.props.user.sex} /><br /><br />
-                电话：<input type="text" defaultValue={this.props.user.tel} /><br /><br />
-                地址：<input type="text" defaultValue={this.props.user.address} /><br /><br />
-                <button onClick={e => this.handleClick(e)}>确定</button>
+                姓名: <input type="text"  ref={n=>this.name=n}/><br /><br />
+                年龄：<input type="text"  ref={n=>this.age=n}/><br /><br />
+                性别：<input type="text" ref={n=>this.sex=n}/><br /><br />
+                电话：<input type="text" ref={n=>this.tel=n}/><br /><br />
+                地址：<input type="text" ref={n=>this.address=n}/><br /><br />
+                <button onClick={() => this.handleClick()}>确定</button>
             </div>
         )
     }
 }
 
-Add.propTypes = {
-    onAdd: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired,
+let mapStateToProps = (state, name) => {
+    return {
+        users: state.users
+    }
+}
+
+let mapDispatchToProps = (dispatch) => {
+    return {
+        onClick: (user) => { dispatch(onAdd(user))}
+    }
 }
 
 
-export default Add
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Add)
+
+// export default Add

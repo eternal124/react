@@ -1,11 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import RouterTest from './routers/router'
+import { createStore } from 'redux'
+
+import RouterTest from './containers/routers'
+import reducer from './reducers/reducer'
 import './css/usePage'
+
+const store = createStore(reducer)
 
 ReactDOM.render(
     <Provider store={store}>
         <RouterTest />
-    </Provider>, 
-    document.getElementById('usepage'))
+    </Provider>, document.getElementById('usepage')
+)

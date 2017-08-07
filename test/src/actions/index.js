@@ -13,10 +13,10 @@ export const onDelete = name => { // 删除哪几个用户 可能是数组
     }
 }
 
-export const onSearch = value => {
+export const onSearch = name => {
     return {
         type: 'SEARCH_USER',
-        value
+        name
     }
 }
 

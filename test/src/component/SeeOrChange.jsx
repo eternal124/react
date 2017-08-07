@@ -1,38 +1,42 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
+
+import One from './One'
+import { onSearch } from '../actions'
 
 class SeeOrChange extends React.Component{
-
-    constructor (props){
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-    }
-
     handleClick (e) {
         e.preventDefault();
-        this.props.onSearch(this.props.value);
+        // console.log(this.search.value)
+        this.props.onClick(this.search.value);
     }
 
     render () {
         return (
             <div>
-                按<select onChange={e => this.handleChange(e)} defaultValue={this.props.option} >
-                    <option value="id">ID</option>
-                    <option value="name">姓名</option>
-                    <option value="tel">电话</option>
-                </select>查找
-                <input type="text" placeholder="输入查找|修改内容" defaultValue={this.props.value}/><br/>
-                <button icon="search" onClick={() => this.props.handleClick(e)}>查找|修改</button>
+                <input type="text" 
+                        placeholder="输入查找|修改内容" 
+                        ref={ node => this.search = node }/>
+                <br/>
+                <button icon="search" onClick={(e) => this.handleClick(e)}>查找|修改</button>
+                <One />
             </div>
         )
     }
 }
 
-SeeOrChange.propTypes = {
-    option: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    onSearch: PropTypes.func.isRequired
+const mapStateToProps = (state, action) => {
+    return {
+        user: state.user
+    }
 }
 
+const mapDispatchToProps = {
+    onClick: (name) => (onSearch(name))
+}
 
-export default SeeOrChange
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SeeOrChange)

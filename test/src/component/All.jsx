@@ -1,34 +1,40 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
 
-const Row = ({ user }) => (
-    <tr>{
-        Object.keys(user).map((property) => <td key={property}> {user[property]} </td>)
-    }
-    </tr>
-)
+import {onSearch} from '../actions'
 
-
-/*
-* 显示所有用户 用于 middle div
-*/
-const All = ({ users }) => (
+const All = ( {users, onClick}) => (
     <table className="all">
         <caption>UsePage</caption>
         <tbody>
-            {users.map((user) => (
-                <Row key={user.id} user={user} />
+            { users.map((user) => (
+                user['tag'] === true
+                ? null
+                : <tr onClick={onClick}>{
+                     Object.keys(user).map((property) => 
+                         <td key={property}> {user[property]} </td>
+                     )
+                 }
+                </tr>
             ))}
         </tbody>
     </table>
 )
 
-All.propTypes = {
-    users: PropTypes.arrayOf( // users数组中的user对象的id属性不可少
-        PropTypes.shape({
-            id: PropTypes.number.isRequired
-        }).isRequired
-    ).isRequired
+let mapStateToProps = (state) => {
+    return {
+        users: state.users
+    }
 }
 
-export default All
+let mapDispatchToProps = (dispatch) => {
+    return {
+        onClick: () => dispatch(onSearch(name))
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(All)

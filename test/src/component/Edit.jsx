@@ -47,12 +47,13 @@ class Edit extends React.Component{
     }   
 }
 
-
-Edit.propTypes = {
-    onEdit: PropTypes.func.isRequired,
-    user: PropTypes.objectOf({
-        name: PropTypes.string.isRequired
-    }).isRequired
+const mapStateToProps = (state, action) => {
+    return {
+        user: state.user
+    }
 }
 
-export default Edit
+export default connect(
+    mapStateToProps
+)(Edit)
+
