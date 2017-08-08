@@ -11,10 +11,15 @@ import Add from '../component/Add'
 import Delete from '../component/Delete'
 import Edit from '../component/Edit'
 import SeeOrChange from '../component/SeeOrChange'
+// import Success from '../component/Success'
+
+const Success = ({match}) =>(
+    <h1> {`${match.params.choose}成功`} </h1>
+)
 
 const RouterTest = () => (
     <Router>
-        <div className="direct">
+        <div className='direct'>
             <div className="left">
                 <h1><Link to='/'>首页</Link></h1>
                 <ul>
@@ -24,17 +29,19 @@ const RouterTest = () => (
                 </ul>
             </div>
             <div className="middle">
-                <Route exact path='/' component={All} />
+                <Route  path='/' component={All} />
             </div>
             <div className="right">
-                <Route path='/add' component={Add} />
-                <Route path='/delete' component={Delete} />
-                <Route path='/see/|change' render={({store}) => (
-                    <SeeOrChange state={store.getState().search} />
-                )} />
-                <Route path='/:choose/success' render={(match) => ( // 删除 或 添加成功 
-                    <h1> {`${match.choose}成功`} </h1>
-                )} />
+                <div className="top">
+                    <Route path='/add' component={Add} />
+                    <Route path='/delete' component={Delete} />
+                    <Route path='/see|change' component={SeeOrChange}/>
+                    <Route path='/edit/:name' component={Edit}/>
+                </div>
+                <div className="bottom">
+                    <Route path='/see|change/:name' component={One}/>
+                    <Route path='/:choose/success' component={Success} />
+                </div>
             </div>
         </div>
     </Router>

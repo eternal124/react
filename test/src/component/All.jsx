@@ -13,7 +13,7 @@ const All = ( {users, onClick}) => (
                 ? null
                 : <tr onClick={onClick}>{
                      Object.keys(user).map((property) => 
-                         <td key={property}> {user[property]} </td>
+                         property==='tag' ? null :<td key={property}> {user[property]} </td>
                      )
                  }
                 </tr>

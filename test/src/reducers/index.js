@@ -4,23 +4,34 @@ import chooseOne from '../component/chooseOne'
 
 const initialState = {
     users: chooseOne.users,
-    user: {}
+    user: {},
+    search: false
 }
 
 const reducer = (state = initialState, action) => {
+    if (state.users === undefined || state.user === undefined){
+        return initialState;
+    }
+
     switch (action.type){
         case 'ADD_USER':
             return {
+                ...state,
                 users: [
                     ...state.users,
                     action.user]
             }
         case 'SEARCH_USER':
             let user = state.users.find(user => user.name === action.name);
-            // console.log(action.name);
+            let search = true
+            if (user === undefined || user.tag === true){
+                user = {}
+                search = false;
+            }
             return {
                 ...state,
-                user: user
+                user: user,
+                search: search
             }
         case 'DELETE_USER':
             return Object.assign({}, state, {
@@ -34,10 +45,22 @@ const reducer = (state = initialState, action) => {
                     return user
                 })
             })
+        case 'EDIT_USER':
+            console.log('edit:')
+            return Object.assign({}, state,{
+                users: state.users.map((user, i) => {
+                    if (action.user.name === user.name){
+                        return {
+                            ...user,
+                            ...action.user
+                        }
+                    }
+                    return user
+                })
+            })
         default:
             return state;
     }
 }
-
 
 export { reducer }

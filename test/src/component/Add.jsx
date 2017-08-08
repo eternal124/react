@@ -12,12 +12,13 @@ class Add extends React.Component{
         user.sex = this.sex.value
         user.tel = this.tel.value
         user.address = this.address.value
+        this.props.history.push('/add/success')
         this.props.onClick(user)
     }
 
     render () {
         return (
-            <div>
+            <div className="add">
                 姓名: <input type="text"  ref={n=>this.name=n}/><br /><br />
                 年龄：<input type="text"  ref={n=>this.age=n}/><br /><br />
                 性别：<input type="text" ref={n=>this.sex=n}/><br /><br />

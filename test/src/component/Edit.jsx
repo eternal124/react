@@ -1,44 +1,46 @@
 import React from 'react'
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
+import { onEdit } from '../actions/index'
 
 class Edit extends React.Component{
-    constructor (props){
-        super(props)
-        this.state = this.props.user; // 状态初始值
-        this.handleChange = this.handleChange.bind(this); // 函数手动绑定
-    }
-    
-    handleChange (event){ // 输入新值
-        let name = event.target.name;
-        let value = event.target.value;
-        this.setState({[name] : value})
-    }
 
     handleClick(e){ // 点击确定
         e.preventDefault();
-        this.props.onEdit(user);
+        var user = {
+            name: this.props.user.name,
+            age: this.age.value,
+            sex: this.sex.value,
+            tel: this.tel.value,
+            address: this.address.value,
+            tag: false
+        }
+        // console.log(user)
+        this.props.history.push('/edit/success')
+        this.props.onClick(user);
     }
 
     render() {
         let thiz = this
         
-        return (
+        return !this.props.search ? null : (
             <div className="edit">{
                 Object.keys(thiz.props.user).map((property) => {
-                    if (property === 'id'){
+                    if (property === 'tag'){
                         return null;
                     }
-                    return (
-                        <label>
-                            {property}: 
+                    return (<label>
+                        <span>{property}：</span>
+                        { property === 'name'?
+                            thiz.props.user[property] :
                             <input  type="text" 
                                     key={property}
-                                    defaultValue={thiz.props.user[property]} 
-                                    onChange={thiz.handleChange} 
-                                    readOnly={{property} === 'name' ? "true" : "false"} />
-                            <br /><br />
-                        </label>
-                    )
+                                    defaultValue={thiz.props.user[property]}
+                                    ref={node => this[property] = node} />
+                         }
+                        <br/>
+                    </label>)
+                    
                 })
             }
                 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onClick={(e) => thiz.handleClick(e)}>确定</button>
@@ -49,11 +51,19 @@ class Edit extends React.Component{
 
 const mapStateToProps = (state, action) => {
     return {
-        user: state.user
+        user: state.user,
+        search: state.search
+    }
+}
+
+const mapDipatchToProps = (dispatch) => {
+    return {
+        onClick: (user) => dispatch(onEdit(user))
     }
 }
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    mapDipatchToProps
 )(Edit)
 

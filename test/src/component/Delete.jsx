@@ -12,26 +12,23 @@ class Delete extends React.Component {
         props.users.map(user => {
             this.state[user.name] = true;
         })
-        // console.log(this.state)
     }
     handleChange(key, e) {
         let checked = !(e.target.checked)
-        // console.log(!checked);
         this.setState({ [key]: checked })
     }
 
     handleClick(e) {
         e.preventDefault();
         var state = {...this.state};
-        // console.log(state);
         var name = Object.keys(state).filter(key => state[key] === false)
-        // console.log(name);
+        this.props.history.push('/delete/success')
         this.props.onClick(name);
     }
     
     render() {
         return (
-            <div>{
+            <div className="delete">{
                 this.props.users.map(user => user['tag'] === true
                     ? null : (<label> 
                         {user.name}
@@ -43,6 +40,7 @@ class Delete extends React.Component {
                     </label>
                 ))
             }
+                <hr/>
                 是否删除所选用户？
                 <button onClick={(e) => this.handleClick(e)}>删除</button>
                 <button type="reset" >取消</button>
