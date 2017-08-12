@@ -12,8 +12,21 @@ class Add extends React.Component{
         user.sex = this.sex.value
         user.tel = this.tel.value
         user.address = this.address.value
-        this.props.history.push('/add/success')
-        this.props.onClick(user)
+        user.tag = false
+        fetch('http://localhost:3000/users', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        .then(res => res.json())
+        .then(json => {
+            console.log(json)
+            this.props.history.push('/add/success')
+            this.props.onClick(user)
+        })
+        .catch(err => console.log('Post Add: ' + err))
     }
 
     render () {

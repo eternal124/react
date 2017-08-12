@@ -3,17 +3,20 @@ import { combineReducers } from 'redux'
 import chooseOne from '../component/chooseOne'
 
 const initialState = {
-    users: chooseOne.users,
+    users: [],
     user: {},
-    search: false
+    search: false,
+    loaded: false
 }
 
 const reducer = (state = initialState, action) => {
-    if (state.users === undefined || state.user === undefined){
-        return initialState;
-    }
-
     switch (action.type){
+        case 'INIT_STATE':
+            return {
+                ...state,
+                ...action.payload,
+                loaded: true
+            }
         case 'ADD_USER':
             return {
                 ...state,

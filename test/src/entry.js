@@ -10,10 +10,15 @@ import style from './css/usePage'
 
 const store = createStore(reducer)
 
-store.subscribe(() => console.log(store.getState()));
+console.log(store.getState())
+
+store.subscribe(() => {
+    console.log('---------State Change-------------')
+    console.log(store.getState())
+});
 
 ReactDOM.render(
     <Provider store={store}>
-        <RouterTest />
+        <RouterTest dispatch={(action=>store.dispatch(action))}/>
     </Provider>, document.getElementById('usepage')
 )
