@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 const One = ( { history, user, search } ) => {   // 给 One这个组件添加了history 和 match两个属性，而这两个属性是从Route的props中解构得到的
-    return !search ? null : (
+    return (
         <div className='one'>
             <ul>{
                 Object.keys(user).map( (property) => 
@@ -14,7 +14,7 @@ const One = ( { history, user, search } ) => {   // 给 One这个组件添加了
             <button onClick={(e)=>{
                 e.preventDefault();
                 const path = `/edit/${user.name}`
-                history.push(path) 
+                history.push(path)
             }}> 编辑 </button>
         </div> 
     ) 
@@ -22,8 +22,7 @@ const One = ( { history, user, search } ) => {   // 给 One这个组件添加了
 
 const mapStateToProps = (state, action) => {
     return {
-        user: state.user,
-        search: state.search
+        user: state.user
     }
 }
 

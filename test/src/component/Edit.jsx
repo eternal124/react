@@ -8,6 +8,7 @@ class Edit extends React.Component{
     handleClick(e){ // 点击确定
         e.preventDefault();
         var user = {
+            id: this.props.user.id,
             name: this.props.user.name,
             age: this.age.value,
             sex: this.sex.value,
@@ -23,10 +24,10 @@ class Edit extends React.Component{
     render() {
         let thiz = this
         
-        return !this.props.search ? null : (
+        return (
             <div className="edit">{
                 Object.keys(thiz.props.user).map((property) => {
-                    if (property === 'tag'){
+                    if (property === 'tag' || property === 'id'){
                         return null;
                     }
                     return (<label>
@@ -51,8 +52,7 @@ class Edit extends React.Component{
 
 const mapStateToProps = (state, action) => {
     return {
-        user: state.user,
-        search: state.search
+        user: state.user
     }
 }
 

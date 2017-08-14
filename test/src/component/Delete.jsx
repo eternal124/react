@@ -10,20 +10,21 @@ class Delete extends React.Component {
         super(props);
         this.state ={}
         props.users.map(user => {
-            this.state[user.name] = true;
+            this.state[user.id] = false;
         })
     }
-    handleChange(key, e) {
-        let checked = !(e.target.checked)
-        this.setState({ [key]: checked })
+    handleChange(id, e) {
+        const checked = !e.target.checked
+        this.setState({ [id]: checked })
     }
 
     handleClick(e) {
         e.preventDefault();
         var state = {...this.state};
-        var name = Object.keys(state).filter(key => state[key] === false)
+        var id = Object.keys(state).filter(key => state[key] === false)
+        console.log(id)
         this.props.history.push('/delete/success')
-        this.props.onClick(name);
+        this.props.onClick(id);
     }
     
     render() {
@@ -34,8 +35,7 @@ class Delete extends React.Component {
                         {user.name}
                         <input key={user.id} 
                             type="checkbox"
-                            checked={!this.state[user.name]}
-                            onChange={(e) => this.handleChange(user.name, e)} /> 
+                            onChange={(e) => this.handleChange(user.id, e)} /> 
                         <br/>
                     </label>
                 ))
@@ -49,16 +49,6 @@ class Delete extends React.Component {
     }
 }
 
-
-Delete.propTypes = {
-    users: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.number.isRequired
-        }).isRequired
-    ).isRequired,
-    onDelete: PropTypes.func.isRequired
-}
-
 const mapStateToProps = (state) => {
     return {
         users: state.users
@@ -67,7 +57,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onClick: (name) => dispatch(onDelete(name))
+        onClick: (id) => dispatch(onDelete(id))
     }
 }
 

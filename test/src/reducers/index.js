@@ -12,23 +12,16 @@ const reducer = (state = initialState, action) => {
     switch (action.type){
         case 'INIT_STATE':
             return {
-                ...state,                
-                ...action.payload,
+                ...state,         
+                users: action.payload,
                 inited: true
             }
-        /*case 'DELETE_USER':
-            console.log('DELETE_USER','----------')
-        case 'EDIT_USER':
-            console.log('EDIT_USER','----------')
-        case 'ADD_USER':
-            console.log('ADD_USER','----------')
-            console.log(action.user)*/
         case 'UPDATE_STATE':
             console.log('----------')
             console.log(action.payload)
             return {
                 ...state,
-                ...action.payload
+                users: action.payload
             }
         case 'SEARCH_USER':
             return {
@@ -36,7 +29,7 @@ const reducer = (state = initialState, action) => {
                 user: action.payload
             }
         default:
-            console.log('----------', action.type, '-----------')
+            console.log('----------', action, '-----------')
             return state;
     }
 }

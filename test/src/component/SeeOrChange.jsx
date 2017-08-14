@@ -8,8 +8,7 @@ import { onSearch } from '../actions'
 class SeeOrChange extends React.Component{
     handleClick (e) {
         e.preventDefault();
-        // console.log(this.search.value)
-        const path = `/see|change/${this.search.value}`;
+        const path = `/see|change/${this.search.value}`
         this.props.onClick(this.search.value);
         this.props.history.push(path);
     }
@@ -22,11 +21,6 @@ class SeeOrChange extends React.Component{
                         ref={ node => this.search = node }/>
                 <br/>
                 <button icon="search" onClick={(e) => this.handleClick(e)}>查找|修改</button>
-                {/* { 
-                    this.props.search ?
-                    <One history={this.props.history}/>
-                    : <h1> 查找失败 </h1> }*/
-                }
             </div>
         )
     }

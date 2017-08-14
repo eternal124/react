@@ -1,18 +1,11 @@
 import { takeEvery } from 'redux-saga'
-import { put, take, call, fork } from 'redux-saga/effects'
+import { select, put, take, call, fork } from 'redux-saga/effects'
 
 function* init() {
     try {
-        const tag = select(state => state.inited)
-        if (tag) {
-            yield take('UPDATE_STATE')
-            const users = yield call(fetch, "http://localhost:3000/users");
-            yield put({ type: 'UPDATE_STATE', payload: users });
-        } else {
-            const users = yield call(fetch, "http://localhost:3000/users");
-            yield put({ type: 'INIT_STATE', payload: users });
-        }
-        
+        const tag = yield select(state => state.inited)
+        const users = yield fetch("http://localhost:3000/users").then(res=>res.json())
+        yield put({ type: 'INIT_STATE', payload: users });
     } catch (error) {
         yield put({ type: 'FAILED', error });
     }
@@ -21,8 +14,8 @@ function* init() {
 function* search() {
     try {
         const { name } = yield take('SEARCH_USER')
-        const result = yield call(fetch, "http://localhost:3000/users?name=" + name);
-        yield put({ type: 'SEARCH_USER', payload: result });
+        const result = yield fetch("http://localhost:3000/users?name=" + name).then(res=>res.json())
+        yield put({ type: 'SEARCH_USER', payload: result[0] });
     } catch (error) {
         yield put({ type: 'FAILED', error });
     }
@@ -31,15 +24,17 @@ function* search() {
 function* add() {
     try {
         const { user } = yield take('ADD_USER')
-        console.log('-----------add---------')
-        yield call(fetch, "http://localhost:3000/users", {
+        const id = yield fetch("http://localhost:3000/users", {
             method: 'post',
-            header: {
+            mode: 'cors',
+            header: {                
+                "Accept": "application/json",
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(user)
-        });
-        yield put({ type: 'UPDATE_STATE'});
+        }).then(res=>res.json())
+        console.log(id)
+        update()
     } catch (error) {
         yield put({ type: 'FAILED', error });
     }
@@ -47,12 +42,29 @@ function* add() {
 
 function* deleteUser() {
     try {
-        console.log('----------delete-----------')
-        const { names } = yield take('DELETE_USER')
-        for (let i in names) {
-            yield call(fetch, "http://localhost:3000/users?name=" + names[i], { method: 'delete' });
+        const { id } = yield take('DELETE_USER')
+        for (let i in id) {
+            yield fetch("http://localhost:3000/users/" + id[i], { method: 'delete' });
         }
-        yield put({ type: 'UPDATE_STATE'});
+        update()
+    } catch (error) {
+        yield put({ type: 'FAILED', error });
+    }
+}
+
+function* edit() {
+    try {
+        const { user } = yield take('EDIT_USER')
+        console.log(user)
+        yield fetch("http://localhost:3000/users/" + user.id, {
+            method: 'put',
+            header: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        });
+        update()
     } catch (error) {
         yield put({ type: 'FAILED', error });
     }
@@ -60,28 +72,20 @@ function* deleteUser() {
 
 function* update() {
     try {
-        console.log('----------update-----------')
-        const { user } = yield take('EDIT_USER')
-        yield call(fetch, "http://localhost:3000/users?name=" + user.name, {
-            method: 'put',
-            header: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(user)
-        });
-        yield put({ type: 'UPDATE_STATE'});
+        yield take('UPDATE_STATE')
+        const users = yield fetch("http://localhost:3000/users").then(res=>res.json());
+        yield put({type: 'UPDATE_STATE', payload: users})
     } catch (error) {
         yield put({ type: 'FAILED', error });
     }
-}
-
+} 
 
 export function* rootSaga(){
     yield [
         fork(init),
-        takeEvery('SEARCH_USER', search),
-        takeEvery('ADD_USER', add),
-        takeEvery('DELETE_USER', deleteUser),
-        takeEvery('EDIT_USER', update)
+        fork(search),
+        fork(add),
+        fork(deleteUser),
+        fork(edit)
     ]
 }

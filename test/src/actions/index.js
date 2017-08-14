@@ -6,16 +6,17 @@ export const onAdd = user => { // 点击添加按钮
     }
 }
 
-export const onDelete = name => { // 删除哪几个用户 可能是数组
+export const onDelete = id => { // 删除哪几个用户 可能是数组
     return {
         type: 'DELETE_USER',
-        name
+        id
     }
 }
 
 export const onSearch = name => {
     return {
         type: 'SEARCH_USER',
+        payload: {},
         name
     }
 }
