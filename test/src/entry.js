@@ -21,6 +21,6 @@ store.subscribe(() => {
 
 ReactDOM.render(
     <Provider store={store}>
-        <RouterTest />
+        <RouterTest dispatch={(action=>store.dispatch(action))}/>
     </Provider>, document.getElementById('usepage')
 )
