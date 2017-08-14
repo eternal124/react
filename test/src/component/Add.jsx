@@ -13,6 +13,9 @@ class Add extends React.Component{
         user.tel = this.tel.value
         user.address = this.address.value
         this.props.history.push('/add/success')
+
+        console.log('------------ADD----------------',JSON.stringify(user))
+
         this.props.onClick(user)
     }
 

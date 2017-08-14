@@ -1,16 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import createSagaMiddleware from 'redux-saga'
 
 import RouterTest from './containers/routers'
 import { reducer } from './reducers/index'
+import { rootSaga } from './sagas/index'
 
 import style from './css/usePage'
 
-const store = createStore(reducer)
+const sagaMiddleware = createSagaMiddleware(rootSaga)
+const store = createStore(reducer, applyMiddleware(sagaMiddleware))
+console.log(store.getState());
 
-store.subscribe(() => console.log(store.getState()));
+store.subscribe(() => {
+    console.log('-------------STATE CHANGE----------------')
+    console.log(store.getState())
+});
 
 ReactDOM.render(
     <Provider store={store}>
