@@ -16,7 +16,8 @@ const Success = ({match}) =>(
     <h1> {`${match.params.choose}成功`} </h1>
 )
 
-class RouterTest extends React.Component{        
+class RouterTest extends React.Component{
+           
     render() {
         return (
             <Router>
@@ -49,6 +50,7 @@ class RouterTest extends React.Component{
         )
     }
 }
+
 
 
 export default RouterTest

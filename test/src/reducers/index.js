@@ -16,13 +16,13 @@ const reducer = (state = initialState, action) => {
                 ...action.payload,
                 inited: true
             }
-        case 'DELETE_USER':
+        /*case 'DELETE_USER':
             console.log('DELETE_USER','----------')
         case 'EDIT_USER':
             console.log('EDIT_USER','----------')
         case 'ADD_USER':
             console.log('ADD_USER','----------')
-            console.log(action.user)
+            console.log(action.user)*/
         case 'UPDATE_STATE':
             console.log('----------')
             console.log(action.payload)
@@ -36,6 +36,7 @@ const reducer = (state = initialState, action) => {
                 user: action.payload
             }
         default:
+            console.log('----------', action.type, '-----------')
             return state;
     }
 }

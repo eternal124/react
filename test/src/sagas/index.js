@@ -3,7 +3,7 @@ import { put, take, call, fork } from 'redux-saga/effects'
 
 function* init() {
     try {
-        const tag = yield select(state => state.inited)
+        const tag = select(state => state.inited)
         if (tag) {
             yield take('UPDATE_STATE')
             const users = yield call(fetch, "http://localhost:3000/users");
@@ -28,7 +28,7 @@ function* search() {
     }
 }
 
-function* add(u) {
+function* add() {
     try {
         const { user } = yield take('ADD_USER')
         console.log('-----------add---------')
@@ -37,7 +37,7 @@ function* add(u) {
             header: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(u)
+            body: JSON.stringify(user)
         });
         yield put({ type: 'UPDATE_STATE'});
     } catch (error) {
@@ -77,9 +77,11 @@ function* update() {
 
 
 export function* rootSaga(){
-    fork(init)
-    takeEvery('SEARCH_USER', search)
-    takeEvery('ADD_USER', add)
-    takeEvery('DELETE_USER', deleteUser)
-    takeEvery('EDIT_USER', update)
+    yield [
+        fork(init),
+        takeEvery('SEARCH_USER', search),
+        takeEvery('ADD_USER', add),
+        takeEvery('DELETE_USER', deleteUser),
+        takeEvery('EDIT_USER', update)
+    ]
 }
