@@ -16,37 +16,8 @@ const Success = ({match}) =>(
     <h1> {`${match.params.choose}成功`} </h1>
 )
 
-<<<<<<< HEAD
 class RouterTest extends React.Component{        
     render() {
-=======
-class RouterTest extends React.Component{
-    constructor(props) {
-        super(props)
-    }
-
-    componentWillMount() {
-        let dispatch = this.props.dispatch
-
-        fetch("http://localhost:3000/users")
-        .then(res => res.json())
-        .then(json => {
-            console.log('----init state-----')
-            console.log(json)
-            dispatch({
-                type: 'INIT_STATE',
-                payload: {
-                    users: json
-                }
-            })
-        })
-        .catch(err => {
-            console.log('Fetch All:' + err)
-        })
-    }
-
-    render () {
->>>>>>> 48d69ead35fce70d2e45fba805c0b313d6c8dbaf
         return (
             <Router>
                 <div className='direct'>
