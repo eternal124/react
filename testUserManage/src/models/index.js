@@ -1,4 +1,6 @@
 
+import { put, take, takeEvery, fork, select } from 'dva/saga'
+
 export default {
 
   namespace: 'useManege',
@@ -32,6 +34,15 @@ export default {
   },
 
   effects: {
+    *root() {
+      yield [
+        fork(init),
+        fork(search),
+        fork(add),
+        fork(deleteUser),
+        fork(edit)
+      ]
+    },
     *init() {
       try {
         const tag = yield select(state => state.inited)
