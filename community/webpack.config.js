@@ -4,8 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const pkg = require("./package.json")
 
 module.exports = {
-    entry : {
-        main : [
+    entry: {
+        main: [
             'react-hot-loader/patch',
             'webpack-dev-server/client?http://0.0.0.0:9000',// WebpackDevServer host and port
             'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
@@ -13,10 +13,10 @@ module.exports = {
         ]
     },
 
-    output : {
+    output: {
         path: path.join(process.cwd(), './dist/'),//生成目录
         publicPath: "/",
-        filename : '[name].[hash].js',
+        filename: '[name].[hash].js',
         chunkFilename: '[name].[chunkhash].chunk.js'
     },
 
@@ -24,7 +24,7 @@ module.exports = {
         extensions: ['.js', '.jsx', '.json', '.css'], // 会使用的后缀名 
     },
 
-    module : {
+    module: {
         rules: [
             {
                 test: /\.(js|jsx)?$/,
@@ -36,15 +36,19 @@ module.exports = {
                 loader: ["style-loader", "css-loader"]
             },
             {
-                test:/\.(png|jpg)$/,
-                loader:'url?limit=40000'
-            }
+                test: /\.(png|jpg)$/,
+                loader: 'url-loader?limit=40000'
+            },
+            {
+                test: /\.(png|jpe?g|gif|ico)$/,
+                loader: 'file-loader?name=assets/[name].[hash].[ext]'
+            },
         ]
     },
 
-    devtool : "cheap-module-eval-source-map",
+    devtool: "cheap-module-eval-source-map",
 
-    plugins : [
+    plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({
@@ -53,9 +57,9 @@ module.exports = {
             }
         }),
         new HtmlWebpackPlugin({
-            title : pkg.name,
-            filenaem : 'home.html',
-            template : './src/home.html',
+            title: pkg.name,
+            filenaem: 'home.html',
+            template: './src/home.html',
             inject: true,
             minify: {
                 removeComments: true,
@@ -67,10 +71,10 @@ module.exports = {
         })
     ],
 
-    devServer : {
+    devServer: {
         historyApiFallback: true,
-        hot : true,
-        noInfo : true,
+        hot: true,
+        noInfo: true,
         contentBase: path.join(__dirname, "dist"),
         clientLogLevel: "error",
         port: 9000,
