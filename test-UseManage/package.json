@@ -27,7 +27,7 @@
     "webpack": "^3.3.0",
     "webpack-dev-server": "^2.6.1",
     "webpack-hot-middleware": "^2.18.2"
-  },
+  }, 
   "dependencies": {
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

@@ -11,6 +11,7 @@ const app = dva();
 app.model(require('./models/index'));
 
 // 4. Router
+// import RouterConfig from './router'
 app.router(require('./router'));
 
 // 5. Start

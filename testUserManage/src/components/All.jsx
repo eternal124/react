@@ -1,36 +1,53 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import { connect } from 'dva'
+import { Table } from 'antd'
 
 import {onSearch} from '../actions/index'
+import '../index.css'
 
-const All = ( {users, onClick}) => (
-    <table className="all">
-        <caption>UsePage</caption>
-        <tbody>
-            { users.map((user) => (
-                user['tag'] === true
-                ? null
-                : <tr onClick={onClick}>{
-                     Object.keys(user).map((property) => 
-                         property==='tag' || property==='id' ? null :<td key={property}> {user[property]} </td>
-                     )
-                 }
-                </tr>
-            ))}
-        </tbody>
-    </table>
-)
+const All = ( {users, onClick}) => {
+    const columns = [{
+        title: 'Id',
+        dataIndex: 'key',
+        key: 'key'
+      }, {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name'
+      }, {
+        title: 'Age',
+        dataIndex: 'age',
+        key: 'age',
+      }, {
+        title: 'Sex',
+        dataIndex: 'sex',
+        key: 'sex',
+      }, {
+        title: 'Address',
+        dataIndex: 'address',
+        key: 'action'
+      }];
 
-let mapStateToProps = (state) => {
+    return (
+        <Table columns={columns} dataSource={users} onRowClick={onClick}/>
+    )
+}
+
+All.propTypes = {
+    users: PropTypes.array.isRequired,
+    onClick: PropTypes.func.isRequired
+}
+
+const mapStateToProps = ({useManage}) => {
     return {
-        users: state.users
+        users: useManage.users
     }
 }
 
-let mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        onClick: () => dispatch(onSearch(name))
+        onClick: (id) => dispatch(onSearch(id))
     }
 }
 

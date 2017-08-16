@@ -1,125 +1,61 @@
-
-import { put, take, takeEvery, fork, select } from 'dva/saga'
+import * as userOperator from '../services/index'
 
 export default {
 
-  namespace: 'useManege',
+  namespace: 'useManage',
 
   state: {
     users: [],
-    user: {},
-    inited: false
+    user: {}
   },
 
   reducers: {
-    ['INIT_STATE'](state, { payload }) {
+    ['GET_STATE'](state, { payload: users }) {
       return {
         ...state,
-        users: payload,
-        inited: true
+        users,
       }
     },
-    ['UPDATE_STATE'](state, { payload }) {
+    ['SEARCH_USER'](state, { payload: user }) {
       return {
         ...state,
-        users: payload
-      }
-    },
-    ['SEARCH_USER'](state, { payload }) {
-      return {
-        ...state,
-        user: payload
+        user
       }
     }
   },
 
   effects: {
-    *root() {
-      yield [
-        fork(init),
-        fork(search),
-        fork(add),
-        fork(deleteUser),
-        fork(edit)
-      ]
+    *getState(action, { put, call }) {
+        const users = yield call(userOperator.getState)
+        yield put({ type: 'GET_STATE', payload: users });
     },
-    *init() {
-      try {
-        const tag = yield select(state => state.inited)
-        const users = yield fetch("http://localhost:3000/users").then(res => res.json())
-        console.log(users)
-
-        yield put({ type: 'INIT_STATE', payload: users });
-      } catch (error) {
-        yield put({ type: 'FAILED', error });
-      }
+    *search({ id }, { put, call }) {
+      const user = yield call(userOperator.search, id)
+      yield put({ type: 'SEARCH_USER', payload: user });
     },
-    *search() {
-      try {
-        const { name } = yield take('SEARCH_USER')
-        const result = yield fetch("http://localhost:3000/users?name=" + name).then(res => res.json())
-        console.log(result[0])
-
-        yield put({ type: 'SEARCH_USER', payload: result[0] });
-      } catch (error) {
-        yield put({ type: 'FAILED', error });
-      }
+    *add({ user }, { put, call }) {
+      const users = yield call(userOperator.add, user)
+      yield put({ type: 'getState'});
     },
-    *add() {
-      try {
-        const { user } = yield take('ADD_USER')
-        const id = yield fetch("http://localhost:3000/users", {
-          method: 'post',
-          mode: 'cors',
-          header: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(user)
-        }).then(res => res.json())
-        console.log(id)
-        update()
-      } catch (error) {
-        yield put({ type: 'FAILED', error });
-      }
+    *deleteUser({ id }, { put, call }) {
+      yield call(userOperator.deleteUser, id)
+      yield put({ type: 'getState'});
     },
-    *deleteUser() {
-      try {
-        const { id } = yield take('DELETE_USER')
-        for (let i in id) {
-          yield fetch("http://localhost:3000/users/" + id[i], { method: 'delete' });
-        }
-        update()
-      } catch (error) {
-        yield put({ type: 'FAILED', error });
-      }
-    },
-    *edit() {
-      try {
-        const { user } = yield take('EDIT_USER')
-        console.log(user)
-        yield fetch("http://localhost:3000/users/" + user.id, {
-          method: 'put',
-          header: {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(user)
-        });
-        update()
-      } catch (error) {
-        yield put({ type: 'FAILED', error });
-      }
-    },
-    *update() {
-      try {
-        yield take('UPDATE_STATE')
-        const users = yield fetch("http://localhost:3000/users").then(res => res.json());
-        console.log(users)
-        yield put({ type: 'UPDATE_STATE', payload: users })
-      } catch (error) {
-        yield put({ type: 'FAILED', error });
-      }
+    *edit({ user }, { put, call }) {
+      yield call(userOperator.edit, user)
+      yield put({ type: 'getState'});
     }
+  },
+
+  subscriptions: {
+    setup({ dispatch, history }) {
+      const reg = /^\/\w$/;
+      return history.listen(({ pathname}) => {
+        // if (reg.test(pathname)) {
+        if (pathname === '/') {
+          dispatch({ type: 'getState'});
+        }
+      });
+    },
   }
 };

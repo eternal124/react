@@ -7,12 +7,9 @@ import Add from './components/Add'
 import Delete from './components/Delete'
 import Edit from './components/Edit'
 import SeeOrChange from './components/SeeOrChange'
+import Success from './components/Success'
 
-import './router.css'
-
-const Success = ({match}) =>(
-  <h1> {`${match.params.choose}成功`} </h1>
-)
+import './main.css'
 
 function RouterConfig({ history }) {
   return (
@@ -27,7 +24,7 @@ function RouterConfig({ history }) {
                 </ul>
             </div>
             <div className="middle">
-                <Route  path='/' component={All} />
+                <Route path='/' component={Add} />
             </div>
             <div className="right">
                 <div className="top">
