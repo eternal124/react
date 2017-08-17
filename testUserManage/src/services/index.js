@@ -5,12 +5,20 @@ export function getState() {
 }
 
 export function deleteUser(id){
-  return request(`http://localhost:3000/users/${id}`, {
-    method: 'DELETE',
-  });
+  for (let i of id) {
+    request(`http://localhost:3000/users/${id[i]}`, {
+      method: 'DELETE',
+    });
+  }
 }
 
-export function search(id) {
+export function search(select, input) {
+  if (select === 'id'){
+    return request(`http://localhost:3000/users/${input}`);
+  } else {
+    return request(`http://localhost:3000/users?${select}=${input}`);
+  }
+
   return request(`http://localhost:3000/users/${id}`);
 }
 

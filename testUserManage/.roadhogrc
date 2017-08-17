@@ -12,7 +12,7 @@
       "extraBabelPlugins": [
         "transform-runtime"
       ]
-    },
-    "outputPath": "./dist"
-  }
+    }    
+  },
+  "outputPath": "./dist"
 }

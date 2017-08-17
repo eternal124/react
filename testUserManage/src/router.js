@@ -1,46 +1,31 @@
 import React from 'react';
-import { Router, Route, Link } from 'dva/router';
+import { Router, Route } from 'dva/router';
 
-import All from './components/All'
-import One from './components/One'
-import Add from './components/Add'
-import Delete from './components/Delete'
-import Edit from './components/Edit'
-import SeeOrChange from './components/SeeOrChange'
-import Success from './components/Success'
-
-import './main.css'
+import { Home } from './routes/Home'
+import { All } from './routes/All'
+import One from './routes/One'
+import Add from './routes/Add'
+import Delete from './routes/Delete'
+import Edit from './routes/Edit'
+import SeeOrChange from './routes/SeeOrChange'
+import { Success } from './routes/Success'
 
 function RouterConfig({ history }) {
-  return (
-    <Router history={history}>
-      <div className='direct'>
-            <div className="left">
-                <h1><Link to='/'>首页</Link></h1>
-                <ul>
-                    <li><Link to='/see|change'>查找|修改</Link></li>
-                    <li><Link to='/add'>添加用户</Link></li>
-                    <li><Link to='/delete'>删除用户</Link></li>
-                </ul>
-            </div>
-            <div className="middle">
-                <Route path='/' component={Add} />
-            </div>
-            <div className="right">
-                <div className="top">
-                    <Route path='/add' component={Add} />
-                    <Route path='/delete' component={Delete} />
-                    <Route path='/see|change' component={SeeOrChange}/>
-                    <Route path='/edit/:name' component={Edit}/>
-                </div>
-                <div className="bottom">
-                    <Route path='/see|change/:name' component={One}/>
-                    <Route path='/:choose/success' component={Success} />
-                </div>
-            </div>
-        </div>
-    </Router>
-  );
+    return (
+        <Router history={history}>
+            <Route name="home" breadcrumbName="UserPage" path='/' component={Home} >
+                <Route name="all" breadcrumbName="Home" path='home' component={All} />
+                <Route name='add' breadcrumbName="Add" path='add' component={Add} />
+                <Route name="delete" breadcrumbName="Delete" path='delete' component={Delete} />
+                <Route name="search" breadcrumbName="SeeChange" path='seechange' component={SeeOrChange}>
+                    <Route name="one" breadcrumbName="User" path='user' component={One}/>
+                </Route>
+                <Route name="edit" breadcrumbName="Edit" path='edit/:id' component={Edit}  />
+                <Route name="success" breadcrumbName=":choose/Success" path=':choose/success' component={Success} />
+            </Route>
+        </Router>
+    );
 }
 
 export default RouterConfig;
+

@@ -9,8 +9,8 @@ import '../index.css'
 const All = ( {users, onClick}) => {
     const columns = [{
         title: 'Id',
-        dataIndex: 'key',
-        key: 'key'
+        dataIndex: 'id',
+        key: 'id'
       }, {
         title: 'Name',
         dataIndex: 'name',
@@ -30,7 +30,7 @@ const All = ( {users, onClick}) => {
       }];
 
     return (
-        <Table columns={columns} dataSource={users} onRowClick={onClick}/>
+        <Table columns={columns} dataSource={users} rowKey='id' onRowClick={onClick}/>
     )
 }
 
@@ -39,9 +39,9 @@ All.propTypes = {
     onClick: PropTypes.func.isRequired
 }
 
-const mapStateToProps = ({useManage}) => {
+const mapStateToProps = ({userManage}) => {
     return {
-        users: useManage.users
+        users: userManage.users
     }
 }
 
