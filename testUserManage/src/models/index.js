@@ -14,8 +14,9 @@ export default {
   reducers: {
     ['GET_STATE'](state, { payload: users }) {
       return {
-        ...state,
-        users,
+        users: users,
+        user: users,
+        editId: 0
       }
     },
     ['TO_EDIT'](state, {payload: id}){
@@ -27,7 +28,7 @@ export default {
     ['SEARCH_USER'](state, { payload: user}) {
       return {
         ...state,
-        user
+        user: typeof user === 'Object' ? [user] : user
       }
     }
   },
@@ -38,6 +39,9 @@ export default {
         console.log('GetStateEffects: ', users)
         yield put({ type: 'GET_STATE', payload: users });
     },
+    *clickOne({ id }, {put, call}){
+      yield put({type:'search', select: 'id', input: id})
+    },
     *search({ select, input }, { put, call }) {
       const user = yield call(userOperator.search, select, input)
       console.log('SelectEffects: ', user)
@@ -45,26 +49,24 @@ export default {
       yield put(routerRedux.push('/seechange/user'))
     },
     *add({ user }, { put, call }) {
-      const users = yield call(userOperator.add, user)
-      console.log('AddEffects: ', users)
-      yield put({ type: 'getState'});
-      yield put(routerRedux.push('/add/success'))
+      yield call(userOperator.add, user)
+      console.log('AddEffects')
+      yield put(routerRedux.push('/home'))
     },
     *deleteUser({ id }, { put, call }) {
       yield call(userOperator.deleteUser, id)
       console.log('DeleteEffects: ', id)
-      yield put({ type: 'getState'});
-      yield put(routerRedux.push('/delete/success'))
+      yield put(routerRedux.push('/home'))
     },
     *toEdit({id}, {put, call}){
+      console.log(id)
       yield put({ type: 'TO_EDIT', payload: id})
       yield put(routerRedux.push(`/edit/${id}`))
     },
     *edit({ user }, { put, call }) {
       yield call(userOperator.edit, user)
       console.log('EditEffects: ', user)
-      yield put({ type: 'getState'});
-      yield put(routerRedux.push('/edit/success'))
+      yield put(routerRedux.push('/home'))
     }
   },
 

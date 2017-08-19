@@ -9,8 +9,8 @@ const { Header, Content, Sider, Footer } = Layout;
 const SubMenu = Menu.SubMenu;
 
 export const Home = ({ routes, params, children }) => (
-    <Layout>
-        <Sider className="left">
+    <Layout style={{height: '100%'}}>
+        <Sider>
             <div style={{ height: '100%', borderRight: 0 }}> UserMange </div>
             <Menu mode="inline" defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} style={{ height: '100%', borderRight: 0 }} >
                 <Menu.Item key="1">
@@ -25,10 +25,10 @@ export const Home = ({ routes, params, children }) => (
             </Menu>
         </Sider>
         <Layout>
-            <Header style={{ background: '#fff', padding: 0 }}> UserMange </Header>
+            <Header style={{ background: '#e0e0e0', padding: 0, textAlign: 'center' }}> <h1>UserMange</h1> </Header>
             <Content style={{ margin: '0 16px' }}>
                 <Breadcrumb routes={routes} params={params} />
-                <div style={{ padding: 24, background: '#fff', minHeight: 660 }}>
+                <div style={{ padding: 24, background: '#fff', minHeight: 750 }}>
                     { children || <All /> }
                 </div>
             </Content>

@@ -11,20 +11,35 @@ class OwnForm extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const { form, onClick, actionCreator, type } = this.props
+        const { form, onClick, type } = this.props
+        const addZero = (num) => {
+            if (num < 10) {
+                return '0' + num
+            }
+            return num + ''
+        }
+        const toId = (today) => {
+            return addZero(today.getFullYear()+1)
+                + addZero(today.getMonth())
+                + addZero(today.getDate())
+                + addZero(today.getHours())
+                + addZero(today.getMinutes())
+                + addZero(today.getSeconds())
+        }
         form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                var id, user
-                const today = new Date()
+                var user, birth, id, age, today = new Date()
                 const date = values['birth']._d
-                const age = today.getFullYear() - date.getFullYear()
-                const birth = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate()
-                console.log(birth)
+                age = today.getFullYear() - date.getFullYear()
+                birth = addZero(date.getFullYear() + 1) + '-' 
+                     + addZero(date.getMonth()) + '-' 
+                     + addZero(date.getDate())
+
                 if (type === 'add') {
-                    id = today.getFullYear() + '' + today.getMonth() + '' + today.getDate()
+                    id = toId(today)
                     user = { ...values, birth: birth, age: age, id: id }
                 } else {
-                    user = { ...values, birth: birth, age: age }
+                    user = { ...this.props.user, ...values, birth: birth, age: age }
                 }
                 console.log(type, 'OwnForm: ', user);
                 onClick(user)
@@ -33,8 +48,9 @@ class OwnForm extends React.Component {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form
-        const { name, birth, sex, tel, prefix, address } = this.props.user
+        const { type, user, form } = this.props
+        const { getFieldDecorator } = form
+        const { name, birth, sex, tel, prefix, address } = user
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -57,8 +73,15 @@ class OwnForm extends React.Component {
                 }
             }
         }
+
+        const intialBirthValue = type === 'edit' ? { 
+            initialValue: moment(birth, 'YYYY/MM/DD')
+        } : {} 
+        const initialPrefixValue = type === 'edit' ? { 
+            initialValue: prefix
+        } : { initialValue: '86' }
         const prefixSelector = getFieldDecorator('prefix', {
-            initialValue: prefix,
+            ...initialPrefixValue
         })(<Select style={{ width: 60 }}>
             <Option value="86">+86</Option>
             <Option value="87">+87</Option>
@@ -76,7 +99,7 @@ class OwnForm extends React.Component {
                 </FormItem>
                 <FormItem {...formItemLayout} label="Age" hasFeedback >
                     {getFieldDecorator('birth', {
-                        initialValue: moment(birth, 'YYYY/MM/DD'),
+                        ...intialBirthValue, 
                         rules: [{
                             required: true, message: 'Please input your age!'
                         }],

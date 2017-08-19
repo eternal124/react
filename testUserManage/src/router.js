@@ -8,7 +8,6 @@ import Add from './routes/Add'
 import Delete from './routes/Delete'
 import Edit from './routes/Edit'
 import SeeOrChange from './routes/SeeOrChange'
-import { Success } from './routes/Success'
 
 function RouterConfig({ history }) {
     return (
@@ -21,7 +20,6 @@ function RouterConfig({ history }) {
                     <Route name="one" breadcrumbName="User" path='user' component={One}/>
                 </Route>
                 <Route name="edit" breadcrumbName="Edit" path='edit/:id' component={Edit}  />
-                <Route name="success" breadcrumbName=":choose/Success" path=':choose/success' component={Success} />
             </Route>
         </Router>
     );

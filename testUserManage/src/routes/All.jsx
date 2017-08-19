@@ -8,7 +8,7 @@ import '../index.css'
 
 const All = ( {users, onClick}) => {
     const columns = [{
-        title: 'Id',
+        title: 'Id-Card',
         dataIndex: 'id',
         key: 'id'
       }, {
@@ -30,7 +30,7 @@ const All = ( {users, onClick}) => {
       }];
 
     return (
-        <Table columns={columns} dataSource={users} rowKey='id' onRowClick={onClick}/>
+        <Table columns={columns} dataSource={users} rowKey='id' onRowClick={(record, id, e) => onClick(record.id)}/>
     )
 }
 
@@ -47,7 +47,10 @@ const mapStateToProps = ({userManage}) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onClick: (id) => dispatch(onSearch(id))
+        onClick: (id) => dispatch({
+            type: 'userManage/clickOne',
+            id
+        })
     }
 }
 

@@ -25,7 +25,7 @@ class SeeOrChange extends React.Component {
         });
     }
     handleClick = (e) => {
-        e.preventDefault();
+        e.preventDefault()
         const { selectValue, inputValue } = this.state
         this.props.onClick(selectValue, inputValue);
     }
@@ -38,15 +38,15 @@ class SeeOrChange extends React.Component {
                     <Option value="id">ID</Option>
                     <Option value="name">Name</Option>
                     <Option value="tel">Tel</Option>
-                </Select>
+                </Select>&nbsp;
                 <Input placeholder='Enter the information what you search'
                     value={inputValue}
                     onChange={this.handleInputChange}
                     style={{width: 250}}
-                />
+                />&nbsp;
                 <Button icon="search" onClick={this.handleClick}>Search|Change</Button>
-                <div style={{background: '#888', width: 900, height: 500, margin: '50px auto'}}>
-                    { this.props.children || <h1>查找内容将在此显示</h1> }
+                <div style={{background: '#e0e0e0', width: 900, height: 550, margin: '50px auto', textAlign: 'center'}}>
+                    { this.props.children || <h>查找内容将在此显示</h> }
                 </div>
             </div>
         )
